@@ -69,4 +69,4 @@ type: Opaque
 data:
   username: dXNlcm5hbWU=  # base64 encoded value of 'username'
   password: cGFzc3dvcmQ=  # base64 encoded value of 'password'
-  adminpassword:  fasdkjfas;dlkfjasd;
+  adminpassword: dXNlcm5hbWU
