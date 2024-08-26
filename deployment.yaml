@@ -59,3 +59,13 @@ spec:
       nodePort: 30389
   selector:
     app.kubernetes.io/name: openldap
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openldap
+type: Opaque
+data:
+  username: dXNlcm5hbWU=  # base64 encoded value of 'username'
+  password: cGFzc3dvcmQ=  # base64 encoded value of 'password'
