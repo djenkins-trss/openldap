@@ -23,21 +23,21 @@ spec:
           env:
             - name: LDAP_ADMIN_USERNAME
               value: "admin"
-            - name: LDAP_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: adminpassword
-                  name: openldap
-            - name: LDAP_USERS
-              valueFrom:
-                secretKeyRef:
-                  key: users
-                  name: openldap
-            - name: LDAP_PASSWORDS
-              valueFrom:
-                secretKeyRef:
-                  key: passwords
-                  name: openldap
+#            - name: LDAP_ADMIN_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  key: adminpassword
+#                  name: openldap
+#            - name: LDAP_USERS
+#              valueFrom:
+#                secretKeyRef:
+#                  key: users
+#                  name: openldap
+#            - name: LDAP_PASSWORDS
+#              valueFrom:
+#                secretKeyRef:
+#                  key: passwords
+#                  name: openldap
           ports:
             - name: tcp-ldap
               containerPort: 1389
@@ -60,13 +60,13 @@ spec:
   selector:
     app.kubernetes.io/name: openldap
 
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: openldap
-type: Opaque
-data:
-  username: dXNlcm5hbWU=  # base64 encoded value of 'username'
-  password: cGFzc3dvcmQ=  # base64 encoded value of 'password'
-  adminpassword: dXNlcm5hbWU
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: openldap
+#type: Opaque
+#data:
+#  username: dXNlcm5hbWU=  # base64 encoded value of 'username'
+#  password: cGFzc3dvcmQ=  # base64 encoded value of 'password'
+
