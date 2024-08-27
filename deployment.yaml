@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: openldap
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-succeeded.teams: Alerts #Teams Channel
+    notifications.argoproj.io/subscribe.on-sync-succeeded.teams: Alerts  #Teams Channel
 spec:
   selector:
     matchLabels:
