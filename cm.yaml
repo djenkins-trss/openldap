@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-notifications-cm
+data:
+  trigger.on-health-degraded: |
+    when: app.status.health.status == 'Degraded'
+    send: [app-on-health-degraded]
+  trigger.on-deployed: |
+    when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+    oncePer: app.status.sync.revision
+    send: [app-sync-succeeded]
+  service.teams: |
+    recipientUrls: 
+      ArgoCD: $channel-teams-url
+  template.app-on-health-degraded: |
+    email:
+      subject: Application {{.app.metadata.name}} has degraded.
+    message: |
+      Application {{.app.metadata.name}} has degraded.
+      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+    teams:
+      facts: |
+        [{
+          "name": "Sync Status",
+          "value": "{{.app.status.sync.status}}"
+        },
+        {
+          "name": "Repository",
+          "value": "{{.app.spec.source.repoURL}}"
+        }
+        {{range $index, $c := .app.status.conditions}}
+          {{if not $index}},{{end}}
+          {{if $index}},{{end}}
+          {
+            "name": "{{$c.type}}",
+            "value": "{{$c.message}}",
+          }
+        {{end}}
+        ]
+      potentialAction: |
+        [{
+          "@type":"OpenUri",
+          "name":"Open Application",
+          "targets":[{
+            "os":"default",
+            "uri":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+          }]
+        },
+        {
+          "@type":"OpenUri",
+          "name":"Open Repository",
+          "targets":[{
+            "os":"default",
+            "uri":"{{.app.spec.source.repoURL | call .repo.RepoURLToHTTPS}}"
+          }]
+        }]
+      title: Application {{.app.metadata.name}} has degraded.
+
+  template.app-sync-succeeded: |
+    teams:
+      facts: |
+        [{
+          "name": "Sync Status",
+          "value": "{{.app.status.sync.status}}"
+        },
+        {
+          "name": "Repository",
+          "value": "{{.app.spec.source.repoURL}}"
+        },
+        {
+          "name": "Revision",
+          "value": "{{.app.status.sync.revision}}"
+        }
+        {{range $index, $c := .app.status.conditions}}
+          {{if not $index}},{{end}}
+          {{if $index}},{{end}}
+          {
+            "name": "{{$c.type}}",
+            "value": "{{$c.message}}",
+          }
+        {{end}}
+        ]
+      potentialAction: |-
+        [{
+          "@type":"OpenUri",
+          "name":"Operation Application",
+          "targets":[{
+            "os":"default",
+            "uri":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+          }]
+        },
+        {
+          "@type":"OpenUri",
+          "name":"Open Repository",
+          "targets":[{
+            "os":"default",
+            "uri":"{{.app.spec.source.repoURL | call .repo.RepoURLToHTTPS}}"
+          }]
+        }]
+      title: New version of an application {{.app.metadata.name}} is up and running.
