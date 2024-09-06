@@ -23,6 +23,9 @@ spec:
           env:
             - name: LDAP_ADMIN_USERNAME
               value: "admin"
+#
+#
+#
 #            - name: LDAP_ADMIN_PASSWORD
 #              valueFrom:
 #                secretKeyRef:
