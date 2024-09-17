@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: openldap
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argocd
+    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: openldap-argocd
 spec:
   selector:
     matchLabels:
